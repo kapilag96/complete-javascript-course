@@ -4,12 +4,14 @@
   "description": "A project to discover recipes",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production"
   },
   "author": "Kapil Agarwal",
   "license": "ISC",
   "devDependencies": {
-    "webpack": "^4.44.1"
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {}
 }

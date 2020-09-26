@@ -1,4 +1,4 @@
-import {elements} from './base';
+import {elements, elementStrings} from './base';
 
 /**
  * Get the search input
@@ -47,18 +47,58 @@ function renderRecipe(recipe){
 }
 
 /**
- * Render all the search results from the API.
- * @param {Array} recipes - An array of recipes from the API.
+ * Render the pagination buttons.
+ * @param {number} page - The current active page
+ * @param {number} totalResults - Total number of recipes
+ * @param {number} resultsPerPage - Number of results displayed per page
  */
-export function renderResults(recipes){
-    recipes.forEach(renderRecipe);
+function renderButtons(page, totalResults, resultsPerPage){
+    const totalPages = Math.ceil(totalResults / resultsPerPage);
+
+    /**
+     * Create a pagination button HTML.
+     * @param {number} page - Page number
+     * @param {string} type - The button type, `prev` or `next`.
+     */
+    const createButton = (page, type) => `
+    <button class="${elementStrings.pageBtn} results__btn--${type}" data-goto=${type === 'prev'? page - 1: page + 1}>
+        <span>Page ${type === 'prev'? page - 1: page + 1}</span>
+        <svg class="search__icon">
+            <use href="img/icons.svg#icon-triangle-${type === 'prev'? 'left': 'right'}"></use>
+        </svg>
+    </button>`;
+
+    let button;
+    if (page === 1){
+        // The first page so only next button is shown
+        button = createButton(page, 'next');
+    } else if (page === totalPages){
+        // Only the last button is shown
+        button = createButton(page, 'prev');
+    }else {
+        // Show both buttons
+        button = createButton(page, 'prev') + createButton(page, 'next');
+    }
+    elements.searchPages.insertAdjacentHTML('afterbegin', button);
 }
 
 /**
- * Clears the existing search view DOM elements
+ * Render all the search results from the API.
+ * @param {Array} recipes - An array of recipes from the API.
+ */
+export function renderResults(recipes, page = 1, resultsPerPage = 10){
+    const start = resultsPerPage * (page - 1);
+    const end = start + resultsPerPage;
+    recipes.slice(start, end).forEach(renderRecipe);
+    renderButtons(page, recipes.length, resultsPerPage);
+}
+
+/**
+ * Clears the existing search view DOM elements and pagination buttons.
  */
 export function clearResults(){
     elements.searchResultList.innerHTML = '';
+    elements.searchPages.innerHTML = '';
 }
 
 export function clearInput(){

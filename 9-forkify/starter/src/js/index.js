@@ -1,6 +1,6 @@
 import Search from './models/Search';
 import * as searchView from './views/searchView';
-import {elements} from './views/base';
+import {elements, renderLoader, clearLoader} from './views/base';
 
 /**
  * Global state object
@@ -22,11 +22,13 @@ async function controlSearch(){
     // 3. Prepare UI for results
     searchView.clearInput();
     searchView.clearResults();
+    renderLoader(elements.searchContainer);
 
     // 4. Search for recipies
     await state.search.getResults();
 
     // 5. Render results in UI
+    clearLoader();
     searchView.renderResults(state.search.result);
 }
 elements.searchForm.addEventListener('submit', e => {

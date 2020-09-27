@@ -55,6 +55,25 @@ elements.searchPages.addEventListener('click', e => {
 /**
  * Recipe controller
  */
-const r = new Recipe(47746);
-r.getRecipe();
-console.log(r);
+async function controlRecipe(){
+
+    // Get the ID from url
+    const id = window.location.hash.replace('#', '');
+
+    // Skip if no ID
+    if (!id) return;
+
+    // Prepare UI for changes
+
+    // Create new Recipe object
+    state.recipe = new Recipe(id);
+
+    // Get recipe data
+    await state.recipe.getRecipe();
+
+    // Render recipe
+    console.log(state.recipe);
+}
+
+// Add Recipe event listeners
+['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));

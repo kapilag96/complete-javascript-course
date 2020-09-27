@@ -74,8 +74,12 @@ async function controlRecipe(){
     // Create new Recipe object
     state.recipe = new Recipe(id);
 
-    // Get recipe data
-    await state.recipe.getRecipe();
+    try {
+        // Get recipe data
+        await state.recipe.getRecipe();
+    } catch (err){
+        console.log(`Could not fetch the recipe details.\n${err}`)
+    }
 
     // Render recipe
     console.log(state.recipe);

@@ -28,12 +28,18 @@ async function controlSearch() {
     searchView.clearResults();
     renderLoader(elements.searchContainer);
 
-    // 4. Search for recipies
-    await state.search.getResults();
+    try{
+        // 4. Search for recipies
+        await state.search.getResults();
 
-    // 5. Render results in UI
-    clearLoader();
-    searchView.renderResults(state.search.result);
+        // 5. Render results in UI
+        clearLoader();
+        searchView.renderResults(state.search.result);
+
+    } catch (err){
+        console.log(`Could not load the recipe search results.\n${err}`);
+        clearLoader();
+    }
 }
 
 elements.searchForm.addEventListener('submit', e => {

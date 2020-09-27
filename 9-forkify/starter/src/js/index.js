@@ -8,7 +8,7 @@ import {elements, renderLoader, clearLoader, elementStrings} from './views/base'
  * - Shoppist list objet
  * - Liked recipes
  */
-const state = {}
+const state = {};
 
 async function controlSearch(){
 
@@ -31,6 +31,7 @@ async function controlSearch(){
     clearLoader();
     searchView.renderResults(state.search.result);
 }
+
 elements.searchForm.addEventListener('submit', e => {
     e.preventDefault();
     controlSearch();

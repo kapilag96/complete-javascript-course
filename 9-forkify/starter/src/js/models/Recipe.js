@@ -53,7 +53,7 @@ export default class Recipe{
         ele = ele.replace(/ *\([^)]*\) */g, ' ');
 
         // Uniform units
-        const units = new Map([
+        const unitMap = new Map([
             [ 'tbsp', ['tablespoons', 'tablespoon']],
             [   'oz', ['ounces', 'ounce']          ],
             [  'tsp', ['teaspoons', 'teaspoon']    ],
@@ -62,7 +62,7 @@ export default class Recipe{
         ]);
 
         // Replace all non uniform units with their uniform units
-        units.forEach((nonStdUnits, stdUnit) => {
+        unitMap.forEach((nonStdUnits, stdUnit) => {
             nonStdUnits.forEach(nonStdUnit => {
                 ele = ele.replace(nonStdUnit, stdUnit);
             });
@@ -70,7 +70,8 @@ export default class Recipe{
 
         // Parse ingredients into count, unit and ingredient
         const ingArr    = ele.split(' ');
-        const unitIndex = ingArr.findIndex(i => Array.from(units.keys()).includes(i));
+        const units = [...Array.from(unitMap.keys()), 'g', 'kg'];
+        const unitIndex = ingArr.findIndex(i => units.includes(i));
 
         let objIng;
         if (unitIndex > -1){

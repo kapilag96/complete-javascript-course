@@ -17,7 +17,7 @@ export default class Recipe{
             this.author      = recipe.publisher;
             this.img         = recipe.image_url;
             this.url         = recipe.source_url;
-            this.ingredients = recipe.ingredients;
+            this.ingredients = recipe.ingredients.map(this.parseIngredient);
 
         } catch (error){
             console.log(error);
@@ -36,7 +36,67 @@ export default class Recipe{
     /**
      * The number of servings created using this recipe.
      */
-    get recipe(){
+    get servings(){
         return 4;
+    }
+
+    /**
+     *
+     * @param {String} ingredient - An ingridient string from the forkify API.
+     * @returns {Object} Parsed ingredient object.
+     */
+    parseIngredient(ingredient){
+
+        let ele = ingredient.toLowerCase();
+
+        // Remove items in paranthesis
+        ele = ele.replace(/ *\([^)]*\) */g, ' ');
+
+        // Uniform units
+        const units = new Map([
+            [ 'tbsp', ['tablespoons', 'tablespoon']],
+            [   'oz', ['ounces', 'ounce']          ],
+            [  'tsp', ['teaspoons', 'teaspoon']    ],
+            [  'cup', ['cups']                     ],
+            ['pound', ['pounds']                   ]
+        ]);
+
+        // Replace all non uniform units with their uniform units
+        units.forEach((nonStdUnits, stdUnit) => {
+            nonStdUnits.forEach(nonStdUnit => {
+                ele = ele.replace(nonStdUnit, stdUnit);
+            });
+        });
+
+        // Parse ingredients into count, unit and ingredient
+        const ingArr    = ele.split(' ');
+        const unitIndex = ingArr.findIndex(i => Array.from(units.keys()).includes(i));
+
+        let objIng;
+        if (unitIndex > -1){
+            //There is a unit
+            let countString = ingArr.slice(0, unitIndex).join('+');
+            countString = countString.replace('-', '+');
+            objIng = {
+                count     : eval(countString),
+                unit      : ingArr[unitIndex],
+                ingredient: ingArr.slice(unitIndex + 1).join(' ')
+            }
+        } else if (parseInt(ingArr[0])){
+            // There is no unit but a number
+            objIng = {
+                count     : parseInt(ingArr[0]),
+                unit      : '',
+                ingredient: ingArr.slice(1).join(' ')
+            };
+        } else if (unitIndex === -1){
+            // There is no unit and no number
+            objIng = {
+                count     : 1,
+                unit      : '',
+                ingredient: ele
+            };
+        }
+        return objIng;
     }
 }

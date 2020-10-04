@@ -1,5 +1,6 @@
 import Recipe from './models/Recipe';
 import Search from './models/Search';
+import * as recipeView from './views/recipeView';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader, elementStrings } from './views/base';
 
@@ -70,6 +71,8 @@ async function controlRecipe(){
     if (!id) return;
 
     // Prepare UI for changes
+    recipeView.clearRecipe();
+    renderLoader(elements.recipe);
 
     // Create new Recipe object
     state.recipe = new Recipe(id);
@@ -77,12 +80,13 @@ async function controlRecipe(){
     try {
         // Get recipe data
         await state.recipe.getRecipe();
+
+        // Render recipe
+        clearLoader();
+        recipeView.renderRecipe(state.recipe);
     } catch (err){
         console.log(`Could not fetch the recipe details.\n${err}`)
     }
-
-    // Render recipe
-    console.log(state.recipe);
 }
 
 // Add Recipe event listeners

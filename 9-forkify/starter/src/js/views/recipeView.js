@@ -1,4 +1,5 @@
 import { elements } from './base';
+import { Fraction } from 'fractional';
 
 /**
  *
@@ -6,12 +7,35 @@ import { elements } from './base';
  * @returns {String} HTML markup for an ingredient
  */
 function createIngredient(ingredientObj){
+
+    /**
+     * Format a count into a nice looking fraction.
+     * @param {number} count- The recipe ingredient count.
+     * @returns {String} Fraction representation of the count
+     */
+    function formatCount(count){
+
+        if (!count) return '?';
+
+        const [int, dec] = count.toString().split('.').map(num => parseInt(num, 10));
+
+        if (!dec) return count;
+
+        if (int === 0){
+            const fr = new Fraction(count);
+            return `${fr.numerator}/${fr.denominator}`;
+        } else {
+            const fr = new Fraction(count - int);
+            return `${int} ${fr.numerator}/${fr.denominator}`
+        }
+    }
+
     return `
     <li class="recipe__item">
         <svg class="recipe__icon">
             <use href="img/icons.svg#icon-check"></use>
         </svg>
-        <div class="recipe__count">${ingredientObj.count}</div>
+        <div class="recipe__count">${formatCount(ingredientObj.count)}</div>
         <div class="recipe__ingredient">
             <span class="recipe__unit">${ingredientObj.unit}</span>
             ${ingredientObj.ingredient}

@@ -83,19 +83,19 @@ export default class Recipe{
                 unit      : ingArr[unitIndex],
                 ingredient: ingArr.slice(unitIndex + 1).join(' ')
             }
-        } else if (parseInt(ingArr[0])){
-            // There is no unit but a number
-            objIng = {
-                count     : parseInt(ingArr[0]),
-                unit      : '',
-                ingredient: ingArr.slice(1).join(' ')
-            };
         } else if (unitIndex === -1){
             // There is no unit and no number
             objIng = {
                 count     : 1,
                 unit      : '',
-                ingredient: ele
+                ingredient: ingArr.join(' ')
+            };
+        } else if (parseInt(ingArr[0]), 10){
+            // There is no unit but a number
+            objIng = {
+                count     : parseInt(ingArr[0], 10),
+                unit      : '',
+                ingredient: ingArr.slice(1).join(' ')
             };
         }
         return objIng;

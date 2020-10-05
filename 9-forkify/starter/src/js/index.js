@@ -53,7 +53,7 @@ elements.searchPages.addEventListener('click', e => {
 
     if (!btn) return;
 
-    const goto = parseInt(btn.dataset.goto);
+    const goto = parseInt(btn.dataset.goto, 10);
 
     searchView.clearResults();
     searchView.renderResults(state.search.result, goto);

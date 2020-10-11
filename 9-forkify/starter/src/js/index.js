@@ -94,3 +94,19 @@ async function controlRecipe(){
 
 // Add Recipe event listeners
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
+
+/**
+ * Handling recipe button clicks
+ */
+elements.recipe.addEventListener('click', e => {
+    if (e.target.closest('.btn-decrease')){
+        state.recipe.updateServings('dec');
+        recipeView.clearRecipe();
+        recipeView.renderRecipe(state.recipe);
+    }
+    else if (e.target.closest('.btn-increase')){
+        state.recipe.updateServings('inc');
+        recipeView.clearRecipe();
+        recipeView.renderRecipe(state.recipe);
+    }
+});

@@ -3,6 +3,8 @@ import axios from 'axios';
 export default class Recipe{
     constructor(id){
         this.id = id;
+        // The default servings
+        this.servings = 4;
     }
 
     /**
@@ -31,13 +33,6 @@ export default class Recipe{
         const numIng = this.ingredients.length;
         const periods = Math.ceil(numIng / 3);
         return periods * 15;
-    }
-
-    /**
-     * The number of servings created using this recipe.
-     */
-    get servings(){
-        return 4;
     }
 
     /**
@@ -99,5 +94,23 @@ export default class Recipe{
             };
         }
         return objIng;
+    }
+
+    /**
+     * Update the servings and ingredient count for this `Recipe`.
+     * Do nothing if ``this.servings`` is 1.
+     * @param {String} type - ``dec`` to decrease the servings by 1,
+     * ``inc`` to increase the servings by 1.
+     */
+    updateServings(type){
+        // Find the new servings amount
+        const newServings = type === 'dec'? this.servings - 1: this.servings + 1;
+        if (newServings < 1) return;
+        // Update the ingredient counts
+        this.ingredients.forEach((ing => {
+            ing.count *= newServings / this.servings;
+        }))
+        // Update the servings
+        this.servings = newServings;
     }
 }

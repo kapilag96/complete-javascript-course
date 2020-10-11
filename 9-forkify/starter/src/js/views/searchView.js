@@ -107,3 +107,17 @@ export function clearResults(){
 export function clearInput(){
     elements.searchInput.value = '';
 }
+
+/**
+ * Highlight the selected recipe in the search view.
+ * @param {String} id - The id of the recipe search result
+ */
+export function highlightSelected(id){
+    // Get all the currect active searches and remove the active class
+    const activeResults = Array.from(document.querySelectorAll(`.${elementStrings.searchActive}`));
+    activeResults.forEach(el => el.classList.remove(elementStrings.searchActive));
+
+    // Add the active class to the new search item
+    const recipe = document.querySelector(`a[href="#${id}"]`)
+    recipe.classList.add(elementStrings.searchActive);
+}

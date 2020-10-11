@@ -8,8 +8,9 @@ export const elements = {
 };
 
 export const elementStrings = {
-    loader: 'loader',
-    pageBtn: 'btn-inline'
+    loader      : 'loader',
+    pageBtn     : 'btn-inline',
+    searchActive: 'results__link--active'
 }
 
 /**

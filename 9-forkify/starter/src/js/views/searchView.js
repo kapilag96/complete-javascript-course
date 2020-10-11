@@ -101,6 +101,9 @@ export function clearResults(){
     elements.searchPages.innerHTML = '';
 }
 
+/**
+ * Clear the input in the search field.
+ */
 export function clearInput(){
     elements.searchInput.value = '';
 }

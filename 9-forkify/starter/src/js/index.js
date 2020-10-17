@@ -114,6 +114,24 @@ function controlList(){
     listView.renderShoppingList(state.list.items);
 }
 
+// Handle delete and list item events
+elements.shoppingList.addEventListener('click', e => {
+    // Find the element
+    const ele = e.target.closest('.shopping__item');
+    const id  = ele.dataset.itemid;
+
+    // Handle the delete button
+    if (e.target.closest('.shopping__delete')){
+        state.list.deleteItem(id);
+        listView.renderShoppingList(state.list.items);
+
+    // Handle the count update
+    } else if (e.target.matches('.shopping__count-value')){
+        const val = parseFloat(e.target.value, 10);
+        state.list.updateCount(id, val);
+    }
+});
+
 /**
  * Handling recipe button clicks
  */
@@ -131,3 +149,5 @@ elements.recipe.addEventListener('click', e => {
     }
 
 });
+
+window.state = state;

@@ -1,6 +1,7 @@
 import List from './models/List';
 import Recipe from './models/Recipe';
 import Search from './models/Search';
+import * as listView from './views/listView';
 import * as recipeView from './views/recipeView';
 import * as searchView from './views/searchView';
 import { elements, renderLoader, clearLoader, elementStrings } from './views/base';
@@ -96,6 +97,23 @@ async function controlRecipe(){
 // Add Recipe event listeners
 ['hashchange', 'load'].forEach(event => window.addEventListener(event, controlRecipe));
 
+
+/**
+ * List controller
+ */
+function controlList(){
+    // Create a list if one does not exist
+    if (!state.list) state.list = new List();
+
+    // Store all ingredients in the list
+    state.recipe.ingredients.map(ig => {
+        state.list.addItem(ig.count, ig.unit, ig.ingredient);
+    })
+
+    // render list
+    listView.renderShoppingList(state.list.items);
+}
+
 /**
  * Handling recipe button clicks
  */
@@ -104,10 +122,12 @@ elements.recipe.addEventListener('click', e => {
         state.recipe.updateServings('dec');
         recipeView.clearRecipe();
         recipeView.renderRecipe(state.recipe);
-    }
-    else if (e.target.closest('.btn-increase')){
+    } else if (e.target.closest('.btn-increase')){
         state.recipe.updateServings('inc');
         recipeView.clearRecipe();
         recipeView.renderRecipe(state.recipe);
+    } else if (e.target.closest('.recipe__btn--add')){
+       controlList();
     }
+
 });

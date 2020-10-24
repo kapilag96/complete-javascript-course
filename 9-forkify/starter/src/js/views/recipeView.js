@@ -17,6 +17,8 @@ function createIngredient(ingredientObj){
 
         if (!count) return '?';
 
+        count = Math.round(count * 1000) / 1000
+
         const [int, dec] = count.toString().split('.').map(num => parseInt(num, 10));
 
         if (!dec) return count;

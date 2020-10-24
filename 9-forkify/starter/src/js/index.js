@@ -1,6 +1,8 @@
+import Likes from './models/Likes';
 import List from './models/List';
 import Recipe from './models/Recipe';
 import Search from './models/Search';
+import * as likesView from './views/likesView';
 import * as listView from './views/listView';
 import * as recipeView from './views/recipeView';
 import * as searchView from './views/searchView';
@@ -114,6 +116,41 @@ function controlList(){
     listView.renderShoppingList(state.list.items);
 }
 
+/**
+ * Likes Controller
+ */
+function controlLikes(){
+    // Create a Likes instance if one does not exist
+    if (!state.likes) state.likes = new Likes();
+    const currentID = state.recipe.id;
+
+    // If current recipe liked
+    if (!state.likes.isLiked(currentID)){
+        // Add like to the state
+        const newLike = state.likes.addLike(
+            currentID,
+            state.recipe.title,
+            state.recipe.author,
+            state.recipe.img
+            );
+
+        // Toggle the like button
+        likesView.toggleLikeBtn(true);
+
+        // Add like to the UI list
+
+    // If user has pressed unlike
+    } else {
+        // Remove the like from Likes
+        const removedLike = state.likes.deleteLike(currentID);
+
+        // Render the like button
+        likesView.toggleLikeBtn(false);
+
+        // Remove like from the UI list
+    }
+}
+
 // Handle delete and list item events
 elements.shoppingList.addEventListener('click', e => {
     // Find the element
@@ -146,6 +183,8 @@ elements.recipe.addEventListener('click', e => {
         recipeView.renderRecipe(state.recipe);
     } else if (e.target.closest('.recipe__btn--add')){
        controlList();
+    } else if (e.target.matches('.recipe__love, .recipe__love *')){
+        controlLikes();
     }
 
 });

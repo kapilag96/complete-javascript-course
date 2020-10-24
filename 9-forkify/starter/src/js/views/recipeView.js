@@ -47,7 +47,7 @@ function createIngredient(ingredientObj){
  * Render a recipe.
  * @param {recipe} A `Recipe` object
  */
-export function renderRecipe(recipe){
+export function renderRecipe(recipe, isLiked){
     const markup = `
     <figure class="recipe__fig">
         <img src="${recipe.img}" alt="Tomato" class="recipe__img">
